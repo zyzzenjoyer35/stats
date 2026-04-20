@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crossword AI — Model Benchmark</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Crossword AI Benchmark</h1>
+<p class="subtitle">Analiza wydajności modeli — polskie krzyżówki</p>
+
+<div class="drop-zone" id="dropZone">
+  <p>Przeciągnij pliki JSON z wynikami modeli lub kliknij, aby wybrać</p>
+  <label>Wczytaj pliki JSON<input type="file" id="fileInput" multiple accept=".json"></label>
+</div>
+<div id="no-files-hint">Załaduj pliki JSON z folderu /logs</div>
+
+<div id="dashboard">
+  <div class="models-loaded" id="modelTags"></div>
+  <div class="grid-4" id="summaryCards"></div>
+
+  <div class="section">
+    <div class="section-title">Skuteczność i efektywność</div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="ch-title">Accuracy per model (%)</div>
+        <div style="position:relative;height:260px;"><canvas id="chartAccuracy" role="img" aria-label="Accuracy per model"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="ch-title">Średnia liczba podpowiedzi</div>
+        <div style="position:relative;height:260px;"><canvas id="chartHints" role="img" aria-label="Avg hints per model"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="ch-title">Łączny koszt (USD)</div>
+        <div style="position:relative;height:260px;"><canvas id="chartCost" role="img" aria-label="Total cost per model"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="ch-title">Średni czas odpowiedzi (ms)</div>
+        <div style="position:relative;height:260px;"><canvas id="chartTime" role="img" aria-label="Avg response time per model"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Rozkład podpowiedzi i koszt per poprawna</div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="ch-title">Rozkład podpowiedzi (stacked)</div>
+        <div class="chart-legend" id="legendHintDist"></div>
+        <div style="position:relative;height:260px;"><canvas id="chartHintDist" role="img" aria-label="Hint distribution stacked bar"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="ch-title">Koszt per poprawna odpowiedź (USD)</div>
+        <div style="position:relative;height:260px;"><canvas id="chartCostPerCorrect" role="img" aria-label="Cost per correct answer"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Trudność wg długości hasła</div>
+    <div class="chart-full">
+      <div class="ch-title">Skuteczność wg liczby liter — wszystkie modele</div>
+      <div style="position:relative;height:260px;"><canvas id="chartWordLen" role="img" aria-label="Success rate by word length"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Rzut 3D — Accuracy × Koszt × Czas</div>
+    <div class="chart-full">
+      <div class="ch-title">Oś X = koszt całkowity · Oś Y = accuracy · Oś Z = czas odpowiedzi · Rozmiar bąbla = liczba pytań</div>
+      <div class="chart-legend" id="legendBubble"></div>
+      <div id="plot3d" style="height:480px;width:100%;"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Rzut 5D — Parallel Coordinates (Accuracy, Koszt, Czas, Podpowiedzi, Koszt/Poprawna)</div>
+    <div class="chart-full">
+      <div class="ch-title">Każda linia = jeden model. Im wyżej na osi Accuracy i niżej na osiach kosztów/czasu — tym lepiej.</div>
+      <div id="plot5d" style="height:420px;width:100%;"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Ranking modeli</div>
+    <div class="table-container" id="rankingTable"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Szczegóły — pytania i odpowiedzi</div>
+    <div class="filters" id="filterBar"></div>
+    <div class="attempts-grid" id="attemptsGrid"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.27.0/plotly.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
